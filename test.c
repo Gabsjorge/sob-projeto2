@@ -16,13 +16,10 @@
 int main(int argc, char ** argv)
 {
     char entry[STRLEN];
-    int size = 0;
+    int fd, ret, size = 0;
 
-    FILE * fp;
-
-    fp = fopen(FILE_NAME,"r+")
-
-    if (fp == NULL)
+    fd = open(FILE_NAME, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+    if (fd < 0)
     {
         printf('Unable to open file %s', FILE_NAME);
         return errno;
@@ -32,6 +29,14 @@ int main(int argc, char ** argv)
     scanf("%[^\n]%*c", entry);
     size = strlen(entry);
 
-    fclose(FILE_NAME);
+    // Needs correct syscall number for write_crypt
+    ret = syscall(0, fd, entry, size);
+    if (ret < 0)
+    {
+        printf('Error: Unable to crypt info into file %s', FILE_NAME);
+        return ret;
+    }
+
+    close(fd);
     return 0;
 }
