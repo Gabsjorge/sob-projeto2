@@ -12,6 +12,7 @@
 
 #define FILE_NAME    "arquivo.txt"
 #define STRLEN       500
+#define WRITE_CODE   0
 
 int main(int argc, char ** argv)
 {
@@ -30,7 +31,7 @@ int main(int argc, char ** argv)
     size = strlen(entry);
 
     // Needs correct syscall number for write_crypt
-    ret = syscall(0, fd, entry, size);
+    ret = syscall(WRITE_CODE, fd, entry, size);
     if (ret < 0)
     {
         printf('Error: Unable to crypt info into file %s', FILE_NAME);
